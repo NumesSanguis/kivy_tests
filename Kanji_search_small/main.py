@@ -40,7 +40,7 @@ class searchDatabase():
 class KanjiSearchScreen(BoxLayout):
     def __init__(self, **kwargs):
         super(KanjiSearchScreen, self).__init__(**kwargs)
-        self.kanji_result = KanjiResult()
+        self.kanji_result = self.ids.search_result
         self.search_database = searchDatabase()
 
     # Search database given input and method
