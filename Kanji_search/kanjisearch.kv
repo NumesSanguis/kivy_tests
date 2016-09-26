@@ -1,0 +1,172 @@
+#:kivy 1.9.2
+# Creator: SurafuSoft
+
+<JLabel@Label>:
+    font_name: 'MeiryoUI'
+    color: [0, 0, 0, 1]
+    markup: True
+
+<JRLabel@JLabel>:
+    text_size: [self.width, None]
+    halign: 'left'
+    padding: [dp(4), dp(1)]
+
+<TouchLabel>:
+    font_name: 'MeiryoUI'
+    color: [0, 0, 0, 1]
+
+<JTextInput@TextInput>:
+    multiline: False
+    font_name: 'MeiryoUI'
+    font_size: self.height * .6
+
+<JRTextInput@JTextInput>:
+    font_size: self.height * .4
+    readonly: True
+
+<ResultBlock>:
+    id: result_block
+    #text: result_block.character
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        TouchLabel:
+            size_hint_x: 0.2
+            text: result_block.character
+            font_size: self.height * 0.6
+
+            # TODO Double tap
+            #on_double_tap: Clipboard.copy(self.text)
+
+            canvas.before:
+                Color:
+                    rgba: (1, 1, 1, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.8
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: [dp(0), dp(10), dp(4), dp(10)]
+
+                JRLabel:
+                    size_hint_x: 0.35
+                    text: "[b]Meanings[/b]:"
+
+                JRTextInput:
+                    text: ", ".join(result_block.meanings)
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: [dp(0), dp(10), dp(4), dp(10)]
+
+                JRLabel:
+                    readonly: True
+                    size_hint_x: 0.35
+                    text: "[b]Origins[/b]:"
+
+                JRTextInput:
+                    text: ", ".join(result_block.origins)
+
+    Label:
+        size_hint_y: None
+        height: dp(1)
+
+        canvas.before:
+            Color:
+                rgba: (0, 0, 0, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+<OptionBoxlayout@BoxLayout>:
+    id: search_box
+
+    orientation: 'vertical'
+    s_text: 'replace'
+    s_active: False
+
+    Label:
+        text: search_box.s_text
+        font_size: self.height * .45
+
+    CheckBox:
+        group: 'search'
+        active: search_box.s_active
+        allow_no_selection: False
+        # "if (... and app.kanji_search_screen)" to have no errors at initialisation
+        on_active: app.kanji_search_screen.setSearchMethod(search_box.s_text) if (args[1] and app.kanji_search_screen) else None
+#        size_hint: [None, None]
+#        size: (100, 100)
+        #color: [1, 1, 1, 10]
+
+
+<KanjiSearchScreen>:
+    orientation: 'vertical'
+    id: search_screen
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.1
+
+        JTextInput:
+            size_hint_x: 0.8
+
+        Button:
+            size_hint_x: 0.2
+            text: 'Search'
+            on_release: root.callDatabaseSearch()
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.1
+
+        canvas.before:
+            Color:
+                rgba: [0.2, 0.2, 0.2, 1]
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        OptionBoxlayout:
+            s_text: 'character'
+            s_active: True
+
+        OptionBoxlayout:
+            s_text: 'id'
+
+        OptionBoxlayout:
+            s_text: 'heisig6'
+
+        OptionBoxlayout:
+            s_text: 'kanjiorigin'
+
+        OptionBoxlayout:
+            s_text: 'meaning'
+
+    KanjiResult:
+        id: search_result
+        size_hint_y: 0.8
+
+        canvas.before:
+            Color:
+                rgba: (0.95, 0.95, 1, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        viewclass: 'ResultBlock'
+        RecycleBoxLayout:
+            default_size: None, dp(112)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+
