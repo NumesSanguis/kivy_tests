@@ -1,0 +1,59 @@
+#:kivy 1.9.2
+# Creator: SurafuSoft
+
+<ResultBlock>:
+    id: result_block
+    #text: result_block.character
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            size_hint_x: 0.2
+            text: result_block.character
+            color: [0, 0, 0, 1]
+
+        Label:
+            text: ", ".join(result_block.meanings)
+            color: [0, 0, 0, 1]
+
+    # Draw line under every result
+    Label:
+        size_hint_y: None
+        height: dp(1)
+
+        canvas.before:
+            Color:
+                rgba: [0, 0, 0, 1]
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+<KanjiSearchScreen>:
+    orientation: 'vertical'
+
+    Button:
+        text: 'Change data'
+        on_release: root.callDatabaseSearch()
+
+    # RecycleView
+    KanjiResult:
+        id: search_result
+
+        canvas.before:
+            Color:
+                rgba: [0.95, 0.95, 1, 1]
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        viewclass: 'ResultBlock'
+        RecycleBoxLayout:
+            default_size: None, dp(56)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+

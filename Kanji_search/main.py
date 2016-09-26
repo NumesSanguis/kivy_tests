@@ -127,6 +127,7 @@ class KanjiSearchScreen(BoxLayout):
     def callDatabaseSearch(self):
         s_input = ':)'
         self.kanji_result.data = self.search_database.retrieve(s_input, self.s_method)
+        self.kanji_result.refresh_from_data()
         print(self.kanji_result.data)
 
 
